@@ -8,7 +8,7 @@ transform = transforms.Compose([
 
 dataset = BirdDataset(
     csv_path="data/train_images.csv",
-    img_dir="data/train_images",
+    img_dir="data/",
     transform=transform
 )
 
