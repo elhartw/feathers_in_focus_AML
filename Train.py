@@ -99,5 +99,5 @@ print("Training klaar, opslaan van model...")
 print("Device:", device)
 print("Aantal parameters:", sum(p.numel() for p in model.parameters()))
 
-torch.save(model.state_dict(), "simple_cnn.pth")
+torch.save(model.state_dict(), "attributes_cnn.pth")
 print("Model saved.")
