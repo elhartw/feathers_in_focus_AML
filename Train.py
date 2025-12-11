@@ -5,7 +5,9 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 
 from Dataset import BirdDataset
-from models.simple_cnn import SimpleCNN
+from models.attribute_cnn import AttributeCNN
+import numpy as np
+
 
 import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -50,10 +52,25 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 # ---- MODEL ----
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model = AttributeCNN(num_classes=NUM_CLASSES, num_attributes=312).to(device)
+
+# Load attributes.npy
+attr_matrix = np.load("data/attributes.npy")  # shape (200, 312)
+model.load_class_attributes(attr_matrix)
+
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=LR)
+
+"""
+# ---- MODEL ----
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SimpleCNN(num_classes=NUM_CLASSES).to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=LR)
+
+"""
 
 # ---- TRAINING LOOP ----
 for epoch in range(EPOCHS):
@@ -82,5 +99,5 @@ print("Training klaar, opslaan van model...")
 print("Device:", device)
 print("Aantal parameters:", sum(p.numel() for p in model.parameters()))
 
-torch.save(model.state_dict(), "simple_cnn.pth")
+torch.save(model.state_dict(), "attributes_cnn.pth")
 print("Model saved.")
